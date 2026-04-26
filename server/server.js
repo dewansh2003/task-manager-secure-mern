@@ -4,13 +4,16 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 
+// 🔹 Routes import
+const taskRoutes = require("./routes/taskRoutes");
+
 const app = express();
 
-// Middlewares
+// 🔹 Middlewares
 app.use(cors());
 app.use(express.json());
 
-// 🔹 Simple MongoDB connection
+// 🔹 MongoDB connection
 const connectDB = async () => {
   try {
     await mongoose.connect("mongodb://127.0.0.1:27017/task_manager");
@@ -23,12 +26,15 @@ const connectDB = async () => {
 
 connectDB();
 
-// 🔹 Basic route (check API working)
+// 🔹 Basic route
 app.get("/", (req, res) => {
-  res.json({ message: "Task Manager API Running..." });
+  res.send("Task Manager API Running...");
 });
 
-// 🔹 Start server
+// 🔹 API routes
+app.use("/api/tasks", taskRoutes);
+
+// 🔹 Server start
 const PORT = 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
